@@ -38,6 +38,17 @@ always give the same output. You can also use your own wordlist, and specify a
 different number of words for output.
 
 
+## Inspiration
+
+* [Chroma-Hash][]: a human-viewable representation of a hash (albeit not one
+  that can be output on a terminal, or shouted down a hallway).
+* [The NATO Phonetic Alphabet][nato]: A great example of the trade-off between
+  clarity of human communication and byte-wise efficiency of representation.
+
+  [Chroma-Hash]: http://mattt.github.com/Chroma-Hash/
+  [nato]: http://en.wikipedia.org/wiki/NATO_phonetic_alphabet
+
+
 ## (Un)license
 
 This is free and unencumbered software released into the public domain.
