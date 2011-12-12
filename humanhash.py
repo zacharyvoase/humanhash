@@ -98,6 +98,14 @@ class HumanHasher(object):
             >>> bytes = [96, 173, 141, 13, 135, 27, 96, 149, 128, 130, 151]
             >>> HumanHasher.compress(bytes, 4)
             [205, 128, 156, 96]
+
+        Attempting to compress a smaller number of bytes to a larger number is
+        an error:
+
+            >>> HumanHasher.compress(bytes, 15)  # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+            ...
+            ValueError: Fewer input bytes than requested output
         """
 
         length = len(bytes)
