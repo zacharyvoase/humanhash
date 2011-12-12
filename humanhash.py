@@ -102,7 +102,7 @@ class HumanHasher(object):
 
         length = len(bytes)
         if target > length:
-            raise ArgumentError("Fewer input bytes than requested output")
+            raise ValueError("Fewer input bytes than requested output")
 
         # Split `bytes` into `target` segments.
         seg_size = length // target
