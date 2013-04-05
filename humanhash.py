@@ -99,18 +99,15 @@ class HumanHasher(object):
             >>> HumanHasher.compress(bytes, 4)
             [205, 128, 156, 96]
 
-        Attempting to compress a smaller number of bytes to a larger number is
-        an error:
+        If there are less than the target number bytes, the input bytes will be returned
 
-            >>> HumanHasher.compress(bytes, 15)  # doctest: +ELLIPSIS
-            Traceback (most recent call last):
-            ...
-            ValueError: Fewer input bytes than requested output
+            >>> HumanHasher.compress(bytes, 15)
+            [96, 173, 141, 13, 135, 27, 96, 149, 128, 130, 151]
         """
 
         length = len(bytes)
-        if target > length:
-            raise ValueError("Fewer input bytes than requested output")
+        if target >= length:
+            return bytes
 
         # Split `bytes` into `target` segments.
         seg_size = length // target
