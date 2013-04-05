@@ -7,6 +7,7 @@ functions. For tighter control over the output, see :class:`HumanHasher`.
 
 import operator
 import uuid as uuidlib
+import math
 
 
 DEFAULT_WORDLIST = (
@@ -110,16 +111,15 @@ class HumanHasher(object):
             return bytes
 
         # Split `bytes` into `target` segments.
-        seg_size = length // target
-        segments = [bytes[i * seg_size:(i + 1) * seg_size]
-                    for i in xrange(target)]
-        # Catch any left-over bytes in the last segment.
-        segments[-1].extend(bytes[target * seg_size:])
-
+        seg_size = float(length) / float(target)
+        segments = [0] * target
+        seg_num = 0
         # Use a simple XOR checksum-like function for compression.
-        checksum = lambda bytes: reduce(operator.xor, bytes, 0)
-        checksums = map(checksum, segments)
-        return checksums
+        for i, byte in enumerate(bytes):
+            seg_num = min(int(math.floor(i / seg_size)), target-1)
+            segments[seg_num] = operator.xor(segments[seg_num], byte)
+
+        return segments
 
     def uuid(self, **params):
 
