@@ -7,6 +7,20 @@ functions. For tighter control over the output, see :class:`HumanHasher`.
 
 import operator
 import uuid as uuidlib
+import sys
+
+if sys.version_info.major == 3:
+    #Map returns an iterator in PY3K
+    py3_map = map
+    def map(*args, **kwargs):
+        return [i for i in py3_map(*args, **kwargs)]
+
+    #Functionality of xrange is in range now
+    xrange = range
+
+    #Reduce moved to functools
+    #http://www.artima.com/weblogs/viewpost.jsp?thread=98196
+    from functools import reduce
 
 
 DEFAULT_WORDLIST = (
