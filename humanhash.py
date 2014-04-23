@@ -65,7 +65,7 @@ class HumanHasher(object):
 
     def __init__(self, wordlist=DEFAULT_WORDLIST):
         if len(wordlist) != 256:
-            raise ArgumentError("Wordlist must have exactly 256 items")
+            raise ValueError("Wordlist must have exactly 256 items")
         self.wordlist = wordlist
 
     def humanize(self, hexdigest, words=4, separator='-'):
