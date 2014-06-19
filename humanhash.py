@@ -135,8 +135,20 @@ class HumanHasher(object):
 
         digest = str(uuidlib.uuid4()).replace('-', '')
         return self.humanize(digest, **params), digest
+        
+    def from_string(self, value, **params):
+        
+        """
+        Generate a UUID with a human-readable representation from an input string.
+
+        Returns `human_repr`.  Accepts the same keyword arguments as :meth:`humanize`
+        """
+
+        digest = str(uuidlib.uuid3(uuidlib.NAMESPACE_DNS, value)).replace('-', '')
+        return self.humanize(digest, **params)
 
 
 DEFAULT_HASHER = HumanHasher()
 uuid = DEFAULT_HASHER.uuid
 humanize = DEFAULT_HASHER.humanize
+from_string = DEFAULT_HASHER.from_string
