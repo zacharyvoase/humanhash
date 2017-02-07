@@ -82,8 +82,8 @@ class HumanHasher(object):
         """
 
         # Gets a list of byte values between 0-255.
-        bytes = map(lambda x: int(x, 16),
-                    map(''.join, zip(hexdigest[::2], hexdigest[1::2])))
+        bytes = list(map(lambda x: int(x, 16),
+                    map(''.join, zip(hexdigest[::2], hexdigest[1::2]))))
         # Compress an arbitrary number of bytes to `words`.
         compressed = self.compress(bytes, words)
         # Map the compressed byte values through the word list.
