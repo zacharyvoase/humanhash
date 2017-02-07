@@ -115,7 +115,7 @@ class HumanHasher(object):
         # Split `bytes` into `target` segments.
         seg_size = length // target
         segments = [bytes[i * seg_size:(i + 1) * seg_size]
-                    for i in xrange(target)]
+                    for i in range(target)]
         # Catch any left-over bytes in the last segment.
         segments[-1].extend(bytes[target * seg_size:])
 
