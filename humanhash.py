@@ -5,6 +5,7 @@ The simplest ways to use this module are the :func:`humanize` and :func:`uuid`
 functions. For tighter control over the output, see :class:`HumanHasher`.
 """
 
+from functools import reduce
 import operator
 import uuid as uuidlib
 
