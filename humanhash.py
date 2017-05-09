@@ -107,16 +107,24 @@ class HumanHasher(object):
         """
 
         length = len(bytes)
+        # If there are less than the target number bytes, the input bytes will be returned
         if target >= length:
             return bytes
 
-        # Split `bytes` into `target` segments.
+        # Split `bytes` evenly into `target` segments
+        # Each segment will be composed of `seg_size` bytes, rounded down for some segments
         seg_size = float(length) / float(target)
+        # Initialize `target` number of segments
         segments = [0] * target
         seg_num = 0
-        # Use a simple XOR checksum-like function for compression.
+
+        # Use a simple XOR checksum-like function for compression
         for i, byte in enumerate(bytes):
+            # Divide the byte index by the segment size to determine which segment to place it in
+            # Floor to create a valid segment index
+            # Min to ensure the index is within `target`
             seg_num = min(int(math.floor(i / seg_size)), target-1)
+            # Apply XOR to the existing segment and the byte
             segments[seg_num] = operator.xor(segments[seg_num], byte)
 
         return segments
