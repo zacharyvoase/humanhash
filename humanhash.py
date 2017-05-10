@@ -7,6 +7,7 @@ functions. For tighter control over the output, see :class:`HumanHasher`.
 
 import operator
 import uuid as uuidlib
+import math
 
 
 DEFAULT_WORDLIST = (
@@ -99,30 +100,34 @@ class HumanHasher(object):
             >>> HumanHasher.compress(bytes, 4)
             [205, 128, 156, 96]
 
-        Attempting to compress a smaller number of bytes to a larger number is
-        an error:
+        If there are less than the target number bytes, the input bytes will be returned
 
-            >>> HumanHasher.compress(bytes, 15)  # doctest: +ELLIPSIS
-            Traceback (most recent call last):
-            ...
-            ValueError: Fewer input bytes than requested output
+            >>> HumanHasher.compress(bytes, 15)
+            [96, 173, 141, 13, 135, 27, 96, 149, 128, 130, 151]
         """
 
         length = len(bytes)
-        if target > length:
-            raise ValueError("Fewer input bytes than requested output")
+        # If there are less than the target number bytes, the input bytes will be returned
+        if target >= length:
+            return bytes
 
-        # Split `bytes` into `target` segments.
-        seg_size = length // target
-        segments = [bytes[i * seg_size:(i + 1) * seg_size]
-                    for i in xrange(target)]
-        # Catch any left-over bytes in the last segment.
-        segments[-1].extend(bytes[target * seg_size:])
+        # Split `bytes` evenly into `target` segments
+        # Each segment will be composed of `seg_size` bytes, rounded down for some segments
+        seg_size = float(length) / float(target)
+        # Initialize `target` number of segments
+        segments = [0] * target
+        seg_num = 0
 
-        # Use a simple XOR checksum-like function for compression.
-        checksum = lambda bytes: reduce(operator.xor, bytes, 0)
-        checksums = map(checksum, segments)
-        return checksums
+        # Use a simple XOR checksum-like function for compression
+        for i, byte in enumerate(bytes):
+            # Divide the byte index by the segment size to determine which segment to place it in
+            # Floor to create a valid segment index
+            # Min to ensure the index is within `target`
+            seg_num = min(int(math.floor(i / seg_size)), target-1)
+            # Apply XOR to the existing segment and the byte
+            segments[seg_num] = operator.xor(segments[seg_num], byte)
+
+        return segments
 
     def uuid(self, **params):
 
