@@ -3,10 +3,14 @@ humanhash: Human-readable representations of digests.
 
 The simplest ways to use this module are the :func:`humanize` and :func:`uuid`
 functions. For tighter control over the output, see :class:`HumanHasher`.
+
+Updated : 12-May-2022
+Ramaguru R: Corrected the Map to List for iterability, Added Reduce Import
 """
 
 import operator
 import uuid as uuidlib
+from functools import reduce
 
 
 DEFAULT_WORDLIST = (
@@ -82,10 +86,12 @@ class HumanHasher(object):
         """
 
         # Gets a list of byte values between 0-255.
-        bytes = map(lambda x: int(x, 16),
-                    map(''.join, zip(hexdigest[::2], hexdigest[1::2])))
+        bytes = map(lambda x: int(x, 16), 
+                                    map(''.join, zip(hexdigest[::2], hexdigest[1::2])))
+        # Convert the map to list 
+        b = list(bytes) 
         # Compress an arbitrary number of bytes to `words`.
-        compressed = self.compress(bytes, words)
+        compressed = self.compress(b, words)
         # Map the compressed byte values through the word list.
         return separator.join(self.wordlist[byte] for byte in compressed)
 
@@ -115,7 +121,7 @@ class HumanHasher(object):
         # Split `bytes` into `target` segments.
         seg_size = length // target
         segments = [bytes[i * seg_size:(i + 1) * seg_size]
-                    for i in xrange(target)]
+                    for i in range(target)]
         # Catch any left-over bytes in the last segment.
         segments[-1].extend(bytes[target * seg_size:])
 
